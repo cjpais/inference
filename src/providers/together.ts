@@ -27,6 +27,9 @@ export class TogetherProvider implements ChatProviderInterface {
           content: params.prompt,
         },
       ],
+      response_format: {
+        type: params.json ? "json_object" : "text",
+      },
       temperature: params.temperature,
       top_p: 0.7,
     });

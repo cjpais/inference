@@ -78,6 +78,9 @@ export class OpenAIProvider
           content: params.prompt,
         },
       ],
+      response_format: {
+        type: params.json ? "json_object" : "text",
+      },
     });
 
     // TODO this is going to return string
