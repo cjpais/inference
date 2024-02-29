@@ -60,13 +60,13 @@ const CHAT_MODELS: Record<string, ChatModel> = {
 4. Create inference with the models you want
 
 ```typescript
-const inference = new Inference(CHAT_MODELS);
+const inference = new Inference({chatModels: CHAT_MODELS});
 ```
 
 5. Call the inference with the model you want to use
 
 ```typescript
-const result = await inference.chat("gpt-3.5", "Hello, world!");
+const result = await inference.chat({model: "gpt-3.5", prompt: "Hello, world!"});
 ```
 
 To install dependencies:
