@@ -17,6 +17,7 @@ WIP Stuff:
 * error handling
 * more rate limiting options
 * more providers (llama.cpp for chat, image and embedding)
+* move to config file & code gen for better typing?
 
 ## Usage
 
