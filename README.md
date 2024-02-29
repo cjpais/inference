@@ -1,6 +1,8 @@
 # inference
 
-Trying to wrap a bunch of different inference providers models. As well as getting them to support typescript more natively. 
+Trying to wrap a bunch of different inference providers models and rate limit them. As well as getting them to support typescript more natively.
+
+My specific application may send many parallel requests to inference models and I need to rate limit these requests across the application per provider. This effectively solves that problem
 
 This is a major WIP so a bunch of things are left unimplmented for the time being. However the basic functionality should be there
 
@@ -15,6 +17,7 @@ WIP Stuff:
 * error handling
 * more rate limiting options
 * more providers (llama.cpp for chat, image and embedding)
+* move to config file & code gen for better typing?
 
 ## Usage
 
@@ -30,7 +33,7 @@ const oai = new OpenAIProvider({
 });
 ```
 
-2. Create a rate limiter based on your own usage
+2. Create a rate limiter based on your own usage (this is in requests per second)
 
 ```typescript
 const oaiLimiter = createRateLimiter(2);
@@ -58,13 +61,13 @@ const CHAT_MODELS: Record<string, ChatModel> = {
 4. Create inference with the models you want
 
 ```typescript
-const inference = new Inference(CHAT_MODELS);
+const inference = new Inference({chatModels: CHAT_MODELS});
 ```
 
 5. Call the inference with the model you want to use
 
 ```typescript
-const result = await inference.chat("gpt-3.5", "Hello, world!");
+const result = await inference.chat({model: "gpt-3.5", prompt: "Hello, world!"});
 ```
 
 To install dependencies:
