@@ -1,8 +1,15 @@
 import OpenAI from "openai";
-import type { ChatProviderInterface, ProviderChatCompletionParams } from ".";
+import type {
+  ChatProviderInterface,
+  EmbeddingProviderInterface,
+  GenerateEmbeddingsParams,
+  ProviderChatCompletionParams,
+} from ".";
 
 // TODO provider class can be much better thought out
-export class TogetherProvider implements ChatProviderInterface {
+export class TogetherProvider
+  implements ChatProviderInterface, EmbeddingProviderInterface
+{
   private api: OpenAI;
 
   constructor({ apiKey }: { apiKey: string }) {
@@ -35,5 +42,16 @@ export class TogetherProvider implements ChatProviderInterface {
     });
 
     return result.choices[0].message.content as T;
+  }
+
+  async generateEmbeddings(
+    params: GenerateEmbeddingsParams
+  ): Promise<number[][]> {
+    const embeddings = await this.api.embeddings.create({
+      input: params.texts,
+      model: params.model,
+    });
+
+    return embeddings.data.map((e) => e.embedding);
   }
 }

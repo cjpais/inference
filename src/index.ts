@@ -2,6 +2,8 @@ import Bottleneck from "bottleneck";
 import type {
   ChatCompletionParams,
   ChatProviderInterface,
+  EmbeddingProviderInterface,
+  GenerateEmbeddingsParams,
   GenerateTranscriptionParams,
   ImageUnderstandingProviderInterface,
   ProviderInterface,
@@ -33,6 +35,10 @@ export interface VisionModel extends Model {
   provider: ImageUnderstandingProviderInterface;
 }
 
+export interface EmbeddingModel extends Model {
+  provider: EmbeddingProviderInterface;
+}
+
 export const createRateLimiter = (rps: number) =>
   new Bottleneck({ minTime: 1000 / rps });
 
@@ -40,15 +46,18 @@ export class Inference {
   private chatModels: Record<string, ChatModel>;
   private visionModels: Record<string, VisionModel>;
   private audioModels: Record<string, TranscriptionModel>;
+  private embeddingModels: Record<string, EmbeddingModel> = {};
 
   constructor(models: {
     chatModels?: Record<string, ChatModel>;
     visionModels?: Record<string, VisionModel>;
     audioModels?: Record<string, TranscriptionModel>;
+    embeddingModels?: Record<string, EmbeddingModel>;
   }) {
     this.chatModels = models.chatModels || {};
     this.visionModels = models.visionModels || {};
     this.audioModels = models.audioModels || {};
+    this.embeddingModels = models.embeddingModels || {};
   }
 
   async chat(params: ChatCompletionParams) {
@@ -107,6 +116,18 @@ export class Inference {
 
     return await model.rateLimiter.schedule(() =>
       model.provider.generateTranscription({ ...params })
+    );
+  }
+
+  async embed(params: GenerateEmbeddingsParams) {
+    const model = this.embeddingModels[params.model];
+
+    if (!model) {
+      throw new Error("Model not found");
+    }
+
+    return await model.rateLimiter.schedule(() =>
+      model.provider.generateEmbeddings(params)
     );
   }
 }

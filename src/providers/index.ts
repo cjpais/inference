@@ -42,7 +42,7 @@ export interface GenerateTranscriptionParams {
 
 export interface GenerateEmbeddingsParams {
   texts: string[];
-  model?: string;
+  model: string;
 }
 
 export interface ProviderInterface {
