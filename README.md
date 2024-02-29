@@ -1,6 +1,8 @@
 # inference
 
-Trying to wrap a bunch of different inference providers models. As well as getting them to support typescript more natively. 
+Trying to wrap a bunch of different inference providers models and rate limit them. As well as getting them to support typescript more natively.
+
+My specific application may send many parallel requests to inference models and I need to rate limit these requests across the application per provider. This effectively solves that problem
 
 This is a major WIP so a bunch of things are left unimplmented for the time being. However the basic functionality should be there
 
@@ -30,7 +32,7 @@ const oai = new OpenAIProvider({
 });
 ```
 
-2. Create a rate limiter based on your own usage
+2. Create a rate limiter based on your own usage (this is in requests per second)
 
 ```typescript
 const oaiLimiter = createRateLimiter(2);
