@@ -114,8 +114,13 @@ export class Inference {
       throw new Error("Model not found");
     }
 
+    const req: GenerateTranscriptionParams = {
+      ...params,
+      model: model.providerModel,
+    };
+
     return await model.rateLimiter.schedule(() =>
-      model.provider.generateTranscription({ ...params })
+      model.provider.generateTranscription(req)
     );
   }
 
@@ -126,8 +131,13 @@ export class Inference {
       throw new Error("Model not found");
     }
 
+    const req = {
+      ...params,
+      model: model.providerModel,
+    };
+
     return await model.rateLimiter.schedule(() =>
-      model.provider.generateEmbeddings(params)
+      model.provider.generateEmbeddings(req)
     );
   }
 }
