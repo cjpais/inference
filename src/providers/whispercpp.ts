@@ -17,7 +17,8 @@ export class WhisperCppProvider implements TranscriptionProviderInterface {
       throw new Error("File must be a string");
 
     const formData = new FormData();
-    formData.append("file", fs.readFileSync(params.file));
+    const data = new Blob([fs.readFileSync(params.file)]);
+    formData.append("file", data);
     formData.append("temperature", params.temperature || 0.0);
     formData.append("temperature_inc", params.temperature_inc || 0.2);
     formData.append("response_format", "json");
