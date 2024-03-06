@@ -38,6 +38,6 @@ export class LlamaCppProvider
       }),
     })
       .then((r) => r.json())
-      .then((r) => r.content);
+      .then((r: any) => r.content);
   }
 }
