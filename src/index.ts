@@ -23,6 +23,9 @@ export interface Model {
   rateLimiter: Bottleneck;
 }
 
+// TODO: rename all of these so they are consistent and make sense.
+// TextModel, ImageModel, AudioModel, EmbeddingModel???
+// How to handle multimodal
 export interface ChatModel extends Model {
   provider: ChatProviderInterface;
 }
