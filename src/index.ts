@@ -149,6 +149,7 @@ import { OpenAIProvider } from "./providers/openai";
 import { TogetherProvider } from "./providers/together";
 import { MistralProvider } from "./providers/mistral";
 import { WhisperCppProvider } from "./providers/whispercpp";
+import { GroqProvider } from "./providers/groq";
 
 import * as Providers from "./providers";
 
@@ -157,5 +158,6 @@ export {
   TogetherProvider,
   MistralProvider,
   WhisperCppProvider,
+  GroqProvider,
   Providers,
 };
