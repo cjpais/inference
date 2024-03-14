@@ -4,13 +4,16 @@ import type {
   ChatProviderInterface,
   EmbeddingProviderInterface,
   GenerateEmbeddingsParams,
+  GenerateSpeechParams,
   GenerateTranscriptionParams,
   ImageUnderstandingProviderInterface,
   ProviderChatCompletionParams,
   ProviderUnderstandImageParams,
+  TTSProviderInterface,
   TranscriptionProviderInterface,
   UnderstandImageParams,
 } from ".";
+import { SpeechCreateParams } from "openai/resources/audio/speech";
 
 // TODO use this instead to get models
 type OpenAIEmbeddingParams = Omit<GenerateEmbeddingsParams, "model"> & {
@@ -22,7 +25,8 @@ export class OpenAIProvider
     ChatProviderInterface,
     TranscriptionProviderInterface,
     EmbeddingProviderInterface,
-    ImageUnderstandingProviderInterface
+    ImageUnderstandingProviderInterface,
+    TTSProviderInterface
 {
   private openai: OpenAI;
 
@@ -115,5 +119,20 @@ export class OpenAIProvider
     });
 
     return result.choices[0].message.content as T;
+  }
+
+  async generateSpeech(params: GenerateSpeechParams): Promise<ArrayBuffer> {
+    const voice = (params.voice as SpeechCreateParams["voice"]) || "alloy";
+    // TODO throw error if invalid, actually we should verify this in typescript itself to be valid
+
+    const audio = await this.openai.audio.speech.create({
+      ...params,
+      model: params.model || "tts-1",
+      input: params.text,
+      voice: voice,
+      response_format: params.format,
+    });
+
+    return audio.arrayBuffer();
   }
 }

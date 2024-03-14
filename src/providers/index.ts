@@ -45,6 +45,14 @@ export interface GenerateEmbeddingsParams {
   model: string;
 }
 
+export interface GenerateSpeechParams {
+  text: string;
+  voice?: string;
+  model: string;
+  format?: "mp3" | "wav" | "pcm";
+  speed?: number;
+}
+
 export interface ProviderInterface {
   generateCompletion?: <T = any>(
     params: ProviderChatCompletionParams
@@ -58,6 +66,9 @@ export interface ProviderInterface {
   understandImage?: <T = any>(
     params: ProviderUnderstandImageParams
   ) => Promise<T>;
+  generateSpeech?: (
+    params: GenerateSpeechParams
+  ) => Promise<Buffer | ArrayBuffer>;
 }
 
 export interface ChatProviderInterface extends ProviderInterface {
@@ -80,4 +91,10 @@ export interface ImageUnderstandingProviderInterface extends ProviderInterface {
   understandImage: <T = any>(
     params: ProviderUnderstandImageParams
   ) => Promise<T>;
+}
+
+export interface TTSProviderInterface extends ProviderInterface {
+  generateSpeech: (
+    params: GenerateSpeechParams
+  ) => Promise<Buffer | ArrayBuffer>;
 }

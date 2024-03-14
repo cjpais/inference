@@ -4,9 +4,11 @@ import type {
   ChatProviderInterface,
   EmbeddingProviderInterface,
   GenerateEmbeddingsParams,
+  GenerateSpeechParams,
   GenerateTranscriptionParams,
   ImageUnderstandingProviderInterface,
   ProviderInterface,
+  TTSProviderInterface,
   TranscriptionProviderInterface,
   UnderstandImageParams,
 } from "./providers";
@@ -42,6 +44,10 @@ export interface EmbeddingModel extends Model {
   provider: EmbeddingProviderInterface;
 }
 
+export interface TTSModel extends Model {
+  provider: TTSProviderInterface;
+}
+
 export const createRateLimiter = (rps: number) =>
   new Bottleneck({ minTime: 1000 / rps });
 
@@ -49,18 +55,21 @@ export class Inference {
   private chatModels: Record<string, ChatModel>;
   private visionModels: Record<string, VisionModel>;
   private audioModels: Record<string, TranscriptionModel>;
-  private embeddingModels: Record<string, EmbeddingModel> = {};
+  private embeddingModels: Record<string, EmbeddingModel>;
+  private speakingModels: Record<string, TTSModel>;
 
   constructor(models: {
     chatModels?: Record<string, ChatModel>;
     visionModels?: Record<string, VisionModel>;
     audioModels?: Record<string, TranscriptionModel>;
     embeddingModels?: Record<string, EmbeddingModel>;
+    speakingModels?: Record<string, TTSModel>;
   }) {
     this.chatModels = models.chatModels || {};
     this.visionModels = models.visionModels || {};
     this.audioModels = models.audioModels || {};
     this.embeddingModels = models.embeddingModels || {};
+    this.speakingModels = models.speakingModels || {};
   }
 
   async chat(params: ChatCompletionParams) {
@@ -143,6 +152,23 @@ export class Inference {
       model.provider.generateEmbeddings(req)
     );
   }
+
+  async speak(params: GenerateSpeechParams) {
+    const model = this.speakingModels[params.model];
+
+    if (!model) {
+      throw new Error("Model not found");
+    }
+
+    const req = {
+      ...params,
+      model: model.providerModel,
+    };
+
+    return await model.rateLimiter.schedule(() =>
+      model.provider.generateSpeech(req)
+    );
+  }
 }
 
 import { OpenAIProvider } from "./providers/openai";
@@ -150,6 +176,7 @@ import { TogetherProvider } from "./providers/together";
 import { MistralProvider } from "./providers/mistral";
 import { WhisperCppProvider } from "./providers/whispercpp";
 import { GroqProvider } from "./providers/groq";
+import { GeppettoProvider } from "./providers/geppetto";
 
 import * as Providers from "./providers";
 
@@ -159,5 +186,6 @@ export {
   MistralProvider,
   WhisperCppProvider,
   GroqProvider,
+  GeppettoProvider,
   Providers,
 };
