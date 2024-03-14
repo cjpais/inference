@@ -48,8 +48,10 @@ export interface TTSModel extends Model {
   provider: TTSProviderInterface;
 }
 
-export const createRateLimiter = (rps: number) =>
-  new Bottleneck({ minTime: 1000 / rps });
+export const createRateLimiter = (
+  rps: number,
+  options?: Bottleneck.ConstructorOptions
+) => new Bottleneck({ ...options, zminTime: 1000 / rps });
 
 export class Inference {
   private chatModels: Record<string, ChatModel>;
