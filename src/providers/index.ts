@@ -35,7 +35,7 @@ export type ProviderUnderstandImageParams = UnderstandImageParams & {
 };
 
 export interface GenerateTranscriptionParams {
-  file: fs.ReadStream | string; // todo, accept file path, urls, etc.
+  file: fs.ReadStream | Buffer; // todo, accept file path, urls, etc.
   model: string;
   prompt?: string;
 }

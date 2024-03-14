@@ -1,4 +1,3 @@
-import fs from "fs";
 import type { TranscriptionProviderInterface } from ".";
 
 type WhisperCPPResponse = {
@@ -13,11 +12,11 @@ export class WhisperCppProvider implements TranscriptionProviderInterface {
   }
 
   async generateTranscription(params: any): Promise<string> {
-    if (typeof params.file !== "string")
-      throw new Error("File must be a string");
+    if (!(params.file instanceof Buffer))
+      throw new Error("File must be a buffer");
 
     const formData = new FormData();
-    const data = new Blob([fs.readFileSync(params.file)]);
+    const data = new Blob([params.file]);
     formData.append("file", data);
     formData.append("temperature", params.temperature || 0.0);
     formData.append("temperature_inc", params.temperature_inc || 0.2);
