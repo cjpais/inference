@@ -14,7 +14,7 @@ import type {
   UnderstandImageParams,
 } from ".";
 import { SpeechCreateParams } from "openai/resources/audio/speech";
-import { FsReadStream } from "openai/_shims/auto/types";
+import type { ReadStream } from "fs";
 
 // TODO use this instead to get models
 type OpenAIEmbeddingParams = Omit<GenerateEmbeddingsParams, "model"> & {
@@ -39,7 +39,7 @@ export class OpenAIProvider
   async generateTranscription(
     params: GenerateTranscriptionParams
   ): Promise<string> {
-    if (!(params.file instanceof FsReadStream))
+    if (!(params.file instanceof ReadStream))
       throw new Error("File must be a stream");
 
     if (!params.model) params.model = "whisper-1";
