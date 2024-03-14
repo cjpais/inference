@@ -1,4 +1,4 @@
-import type { ReadStream } from "fs";
+import { Uploadable } from "openai/uploads";
 
 export interface ChatCompletionParams {
   model: string;
@@ -35,7 +35,7 @@ export type ProviderUnderstandImageParams = UnderstandImageParams & {
 };
 
 export interface GenerateTranscriptionParams {
-  file: ReadStream | Buffer; // todo, accept file path, urls, etc.
+  file: Uploadable | Buffer; // todo, accept file path, urls, etc.
   model: string;
   prompt?: string;
 }
