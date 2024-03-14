@@ -51,7 +51,7 @@ export interface TTSModel extends Model {
 export const createRateLimiter = (
   rps: number,
   options?: Bottleneck.ConstructorOptions
-) => new Bottleneck({ ...options, zminTime: 1000 / rps });
+) => new Bottleneck({ ...options, minTime: 1000 / rps });
 
 export class Inference {
   private chatModels: Record<string, ChatModel>;
