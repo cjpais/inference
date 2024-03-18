@@ -49,7 +49,7 @@ export interface GenerateSpeechParams {
   text: string;
   voice?: string;
   model: string;
-  format?: "mp3" | "wav" | "pcm";
+  format?: "mp3" | "wav" | "pcm" | "ogg";
   speed?: number;
 }
 

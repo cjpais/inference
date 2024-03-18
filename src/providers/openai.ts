@@ -125,12 +125,14 @@ export class OpenAIProvider
     const voice = (params.voice as SpeechCreateParams["voice"]) || "alloy";
     // TODO throw error if invalid, actually we should verify this in typescript itself to be valid
 
+    const format = params.format === "ogg" ? "opus" : params.format || "mp3";
+
     const audio = await this.openai.audio.speech.create({
       ...params,
       model: params.model || "tts-1",
       input: params.text,
       voice: voice,
-      response_format: params.format,
+      response_format: format,
     });
 
     return audio.arrayBuffer();
