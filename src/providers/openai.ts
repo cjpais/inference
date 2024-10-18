@@ -31,9 +31,9 @@ export class OpenAIProvider
 {
   private openai: OpenAI;
 
-  constructor({ apiKey }: { apiKey: string }) {
+  constructor({ apiKey, baseURL }: { apiKey: string; baseURL?: string }) {
     // TODO set default model
-    this.openai = new OpenAI({ apiKey });
+    this.openai = new OpenAI({ apiKey, baseURL });
   }
 
   async generateTranscription(
