@@ -179,6 +179,7 @@ import { MistralProvider } from "./providers/mistral";
 import { WhisperCppProvider } from "./providers/whispercpp";
 import { GroqProvider } from "./providers/groq";
 import { GeppettoProvider } from "./providers/geppetto";
+import { AnthropicProvider } from "./providers/anthropic";
 
 import * as Providers from "./providers";
 
@@ -189,5 +190,6 @@ export {
   WhisperCppProvider,
   GroqProvider,
   GeppettoProvider,
+  AnthropicProvider,
   Providers,
 };
