@@ -31,7 +31,7 @@ export class AnthropicProvider
         },
       ],
       stream: false,
-      max_tokens: params.maxTokens ? params.maxTokens : 128000,
+      max_tokens: params.maxTokens ? params.maxTokens : 8192,
     });
 
     // @ts-ignore
